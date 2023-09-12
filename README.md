@@ -1,2 +1,3 @@
 ## Local run
-1.
+
+### [OpenAPI docs](http://localhost:5020/docs)

@@ -1,7 +1,6 @@
 
 TODO:
-global exceptions handler
-swagger
+global exceptions handler https://apiflask.com/error-handling/
 проверка на то что в прод моде сервис не валится от исключений
 пользовательские исключения
 

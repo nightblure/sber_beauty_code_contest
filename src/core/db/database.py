@@ -15,7 +15,7 @@ def create_db_engine(url, stmt_timeout=5000) -> Engine:
     )
 
 
-ROOT = Path(__file__).parent.parent.parent.resolve()
+ROOT = Path(__file__).parent.parent.parent.parent.resolve()
 DATABASE_URL = f"sqlite:///{ROOT}/db.db"
 
 
