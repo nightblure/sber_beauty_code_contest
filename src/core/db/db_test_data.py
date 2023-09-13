@@ -1,5 +1,5 @@
 from core.db.database import engine, get_session
-from src.core.models import Asset, Base, User
+from core.db.models import Asset, Base, User
 
 Base.metadata.create_all(bind=engine)
 
