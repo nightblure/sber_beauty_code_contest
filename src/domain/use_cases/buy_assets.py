@@ -18,21 +18,22 @@ class BuyAssetsUseCases:
     def buy_assets(self, buy_assets: list[BuyAssetDTO]):
         user = self.operations_svc.repository.current_user
 
+        # check input assets existing
         tickers = [asset.ticker for asset in buy_assets]
         db_assets = self.assets_svc.get_assets(tickers)
-        db_ticker_to_asset = {asset.ticker: asset for asset in db_assets}
+        ticker_to_db_asset = {asset.ticker: asset for asset in db_assets}
 
         for asset in buy_assets:
-            if asset.ticker not in db_ticker_to_asset:
+            if asset.ticker not in ticker_to_db_asset:
                 raise AssetNotFoundError(asset.ticker)
 
+        # check that user balance enough for buy operation
         buy_assets_with_prices = self.buy_assets_svc.fill_buy_assets_prices(buy_assets)
-
         buy_sum = self.buy_assets_svc.calculate_total_buy_sum(buy_assets_with_prices)
-        user_balance = user.balance
 
-        if user_balance < buy_sum:
+        if user.balance < buy_sum:
             raise InsufficientFundsError()
 
+        # fill the transaction log and charge off funds from the user balance
         self.buy_assets_svc.fill_transaction_log(buy_assets_with_prices, user)
         return self.operations_svc.charge_off_from_balance(buy_sum)

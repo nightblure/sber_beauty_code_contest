@@ -1,8 +1,8 @@
-from src.api.balance.schemas.refill_balance import (
+from src.api.balance.schemas import (
     RefillBalanceArgs,
     RefillBalanceSchema,
+    BalanceSchema,
 )
-from src.api.balance.schemas.user_balance import BalanceSchema
 from src.app import app
 from src.domain.use_cases.balance import BalanceUseCases
 
