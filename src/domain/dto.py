@@ -1,7 +1,10 @@
 import dataclasses
+from decimal import Decimal
 
 
 @dataclasses.dataclass
-class AssetDTO:
+class BuyAssetDTO:
     ticker: str
-    count: float
+    count: Decimal
+    price: Decimal = None
+    id: int = None

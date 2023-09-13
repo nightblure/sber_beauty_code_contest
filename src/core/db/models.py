@@ -1,5 +1,3 @@
-import enum
-
 from sqlalchemy import (
     DECIMAL,
     CheckConstraint,
@@ -14,17 +12,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
+from src.core.db.enums import OperationType
+
 Base = declarative_base()
-
-
-class AutoNameEnum(enum.Enum):
-    def _generate_next_value_(name, start, count, last_values):
-        return name
-
-
-class OperationType(AutoNameEnum):
-    sell = enum.auto()
-    buy = enum.auto()
 
 
 class Asset(Base):
@@ -54,7 +44,7 @@ class TransactionLog(Base):
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     asset_id = Column(Integer, ForeignKey(Asset.id), nullable=False)
     operation_type = Column(Enum(OperationType), nullable=False)
-    datetime = Column(DateTime, nullable=False, server_default=func.utcnow())
+    datetime = Column(DateTime, nullable=False, server_default=func.now())
     value = Column(DECIMAL, nullable=False)
 
     user = relationship(User, uselist=False)

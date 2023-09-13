@@ -6,7 +6,12 @@ from marshmallow import validates, ValidationError
 
 class BuyAssetArg(Schema):
     ticker = fields.String()
-    count = fields.Float()
+    count = fields.Decimal()
+
+    @validates("count")
+    def validate_positive_count(self, count):
+        if count <= 0:
+            raise ValidationError("Count must be positive")
 
 
 class BuyAssetsArgs(Schema):
@@ -20,4 +25,5 @@ class BuyAssetsArgs(Schema):
 
 class BuyAssetsSuccessSchema(Schema):
     body = fields.Nested(BuyAssetsArgs)
+    current_balance = fields.Decimal()
     success = fields.Boolean()

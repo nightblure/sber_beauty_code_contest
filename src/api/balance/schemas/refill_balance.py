@@ -14,4 +14,4 @@ class RefillBalanceArgs(Schema):
 
 class RefillBalanceSchema(Schema):
     value = fields.Decimal()
-    new_balance = fields.Decimal()
+    current_balance = fields.Decimal()

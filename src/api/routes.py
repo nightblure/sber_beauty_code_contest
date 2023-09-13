@@ -1,7 +1,8 @@
 from apiflask import APIBlueprint
 
-from src.api.common.views import get_assets
-from src.api.user_operations.views import get_user_balance, buy_assets, refill_balance
+from src.api.assets.views import get_assets
+from src.api.buy_assets.views import buy_assets
+from src.api.balance.views import get_user_balance, refill_balance
 
 
 def register_urls(app):
