@@ -9,7 +9,7 @@
 
 1. ```poetry install```
 2. ```poetry shell```
-3. ```run_flask_dev``` or ```run_flask```
+3. ```make run_flask_dev``` or ```make run_flask```
 4. [Try to open the docs](http://localhost:5020/docs)
 
 ---
@@ -18,3 +18,8 @@
 
 1. ```make build``` or ```docker-compose up -d```
 2. [Try to open the docs](http://localhost:8053/docs)
+
+---
+
+## Initial Data
+* Run script ```db_test_data.py```

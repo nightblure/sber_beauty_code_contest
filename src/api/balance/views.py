@@ -10,7 +10,8 @@ from src.domain.use_cases.balance import BalanceUseCases
 @app.output(BalanceSchema)
 def get_user_balance():
     uc = BalanceUseCases()
-    return {"balance": uc.get_balance()}
+    balance, assets_balance = uc.get_balance()
+    return {"balance": balance, "assets_balance": assets_balance}
 
 
 @app.input(RefillBalanceArgs, location="json")

@@ -1,11 +1,11 @@
-from src.api.buy_assets.schemas import BuyAssetsArgs, BuyAssetsSuccessSchema
+from src.api.buy_assets.schemas import BuyAssetsArgs, BuyAssetsSchema
 from src.app import app
 from src.domain.dto import BuyAssetDTO
 from src.domain.use_cases.buy_assets import BuyAssetsUseCases
 
 
 @app.input(BuyAssetsArgs, location="json")
-@app.output(BuyAssetsSuccessSchema)
+@app.output(BuyAssetsSchema)
 def buy_assets(json_data):
     uc = BuyAssetsUseCases()
     assets = [BuyAssetDTO(**asset_data) for asset_data in json_data["assets"]]

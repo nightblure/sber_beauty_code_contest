@@ -47,5 +47,5 @@ class TransactionLog(Base):
     datetime = Column(DateTime, nullable=False, server_default=func.now())
     value = Column(DECIMAL, nullable=False)
 
-    user = relationship(User, uselist=False)
-    asset = relationship(Asset, uselist=False)
+    user = relationship(User, uselist=False, lazy="joined")
+    asset = relationship(Asset, uselist=False, lazy="joined")

@@ -4,7 +4,7 @@ from apiflask.validators import Length
 from marshmallow import validates, ValidationError
 
 
-class BuyAssetArg(Schema):
+class SellAssetArg(Schema):
     ticker = fields.String()
     count = fields.Decimal()
 
@@ -14,8 +14,8 @@ class BuyAssetArg(Schema):
             raise ValidationError("Count must be positive")
 
 
-class BuyAssetsArgs(Schema):
-    assets = fields.List(fields.Nested(BuyAssetArg), validate=Length(min=1))
+class SellAssetsArgs(Schema):
+    assets = fields.List(fields.Nested(SellAssetArg), validate=Length(min=1))
 
     @validates("assets")
     def validate_unique_assets_ticker(self, assets):
@@ -23,7 +23,7 @@ class BuyAssetsArgs(Schema):
             raise ValidationError("Tickers must be unique")
 
 
-class BuyAssetsSchema(Schema):
-    body = fields.Nested(BuyAssetsArgs)
+class SellAssetsSchema(Schema):
+    body = fields.Nested(SellAssetsArgs)
     current_balance = fields.Decimal()
     success = fields.Boolean()

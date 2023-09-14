@@ -17,5 +17,11 @@ class RefillBalanceSchema(Schema):
     current_balance = fields.Decimal()
 
 
+class AssetBalance(Schema):
+    ticker = fields.String()
+    total = fields.Decimal()
+
+
 class BalanceSchema(Schema):
     balance = fields.Decimal()
+    assets_balance = fields.List(fields.Nested(AssetBalance))
