@@ -21,5 +21,6 @@
 
 ---
 
-## Initial Data
-* Run script ```db_test_data.py```
+## Information
+* **Init data**: run script ```db_test_data.py```
+* **HTTP requests examples**: ```examples.http```

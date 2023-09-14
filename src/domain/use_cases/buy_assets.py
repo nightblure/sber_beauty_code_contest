@@ -30,15 +30,18 @@ class BuyAssetsUseCases:
             raise AssetNotFoundError(not_found_ticker)
 
         # check that user balance enough for buy operation
-        buy_assets_with_prices = self.assets_svc.fill_assets_prices(buy_assets)
+        tickers = [a.ticker for a in buy_assets]
+        db_assets = self.assets_svc.get_assets(tickers)
+        ticker_to_db_asset = {a.ticker: a for a in db_assets}
 
-        for buy_asset in buy_assets_with_prices:
-            if user.balance < buy_asset.price * buy_asset.count:
+        for buy_asset in buy_assets:
+            db_asset = ticker_to_db_asset[buy_asset.ticker]
+            if user.balance < db_asset.price * buy_asset.count:
                 raise InsufficientFundsToBuyAssetError(buy_asset.ticker)
 
+        assets = self.buy_assets_svc.get_transactions_assets(buy_assets, db_assets)
+
         # fill the transaction log and charge off funds from the user balance
-        self.transaction_svc.fill_transaction_log(
-            buy_assets_with_prices, user, OperationType.buy
-        )
-        buy_sum = self.buy_assets_svc.calculate_total_buy_sum(buy_assets_with_prices)
+        self.transaction_svc.fill_transaction_log(assets, user, OperationType.buy)
+        buy_sum = self.buy_assets_svc.calculate_total_buy_sum(assets)
         return self.balance_svc.charge_off_from_balance(buy_sum)

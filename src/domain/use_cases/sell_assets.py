@@ -37,9 +37,12 @@ class SellAssetsUseCases:
         db_assets_balance = self.transaction_svc.get_assets_balance_from_transactions()
         db_asset_to_balance = {a.ticker: a.total for a in db_assets_balance}
 
-        sell_assets_with_prices = self.assets_svc.fill_assets_prices(sell_assets)
+        tickers = [a.ticker for a in sell_assets]
+        db_assets = self.assets_svc.get_assets(tickers)
 
-        for sell_asset in sell_assets_with_prices:
+        assets = self.sell_assets_svc.get_transactions_assets(sell_assets, db_assets)
+
+        for sell_asset in assets:
             sell_sum = sell_asset.count * sell_asset.price
             db_asset_balance = db_asset_to_balance.get(sell_asset.ticker)
 
@@ -50,11 +53,7 @@ class SellAssetsUseCases:
                 raise InsufficientAssetFundsToSellError(sell_asset.ticker)
 
         # fill the transaction log and refill user balance
-        self.transaction_svc.fill_transaction_log(
-            sell_assets_with_prices, user, OperationType.sell
-        )
+        self.transaction_svc.fill_transaction_log(assets, user, OperationType.sell)
 
-        sell_sum = self.sell_assets_svc.calculate_total_sell_sum(
-            sell_assets_with_prices
-        )
+        sell_sum = self.sell_assets_svc.calculate_total_sell_sum(assets)
         return self.balance_svc.refill_balance(sell_sum)

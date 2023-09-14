@@ -1,0 +1,57 @@
+### Get balance
+
+GET http://127.0.0.1:5020/api/user/balance
+Accept: application/json
+
+### Get assets
+
+GET http://127.0.0.1:5020/api/assets
+Accept: application/json
+
+### Refill balance
+
+POST http://127.0.0.1:5020/api/user/refill-balance
+Accept: application/json
+Content-Type: application/json
+
+{
+    "value": 100
+}
+
+### Buy assets
+
+POST http://127.0.0.1:5020/api/user/buy-assets
+Accept: application/json
+Content-Type: application/json
+
+{
+    "assets": [
+        {
+            "ticker": "BTC",
+            "count": 2
+        },
+        {
+            "ticker": "ETH",
+            "count": 3.4
+        }
+    ]
+}
+
+### Sell assets
+
+POST http://127.0.0.1:5020/api/user/sell-assets
+Accept: application/json
+Content-Type: application/json
+
+{
+    "assets": [
+        {
+            "ticker": "BTC",
+            "count": 1.3
+        },
+        {
+            "ticker": "ETH",
+            "count": 2
+        }
+    ]
+}

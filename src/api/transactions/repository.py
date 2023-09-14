@@ -2,14 +2,17 @@ import logging
 
 from src.api.base_repository import BaseRepository
 from src.core.db.models import User, TransactionLog, OperationType
-from src.domain.dto import BuyAssetDTO
+from src.domain.dto import TransactionAssetDTO
 
 logger = logging.getLogger(__name__)
 
 
 class TransactionRepository(BaseRepository):
     def fill_transaction_log_by_assets(
-        self, user: User, assets: list[BuyAssetDTO], operation_type: OperationType
+        self,
+        user: User,
+        assets: list[TransactionAssetDTO],
+        operation_type: OperationType,
     ) -> list[TransactionLog]:
         records = []
 
@@ -33,7 +36,7 @@ class TransactionRepository(BaseRepository):
             s.commit()
             return records
 
-    def get_log_records_by_user(self, user) -> list[TransactionLog]:
+    def get_transactions_by_user(self, user) -> list[TransactionLog]:
         with self.session() as s:
             return (
                 s.query(TransactionLog).filter(TransactionLog.user_id == user.id).all()

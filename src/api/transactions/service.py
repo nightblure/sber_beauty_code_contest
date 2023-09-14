@@ -5,7 +5,7 @@ from decimal import Decimal
 from src.api.base_service import BaseService
 from src.api.transactions.repository import TransactionRepository
 from src.core.db.models import OperationType
-from src.domain.dto import BuyAssetDTO, AssetBalanceDTO
+from src.domain.dto import AssetBalanceDTO, TransactionAssetDTO
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ class TransactionService(BaseService):
         self.repository = TransactionRepository()
 
     def fill_transaction_log(
-        self, assets: list[BuyAssetDTO], user, operation_type: OperationType
+        self, assets: list[TransactionAssetDTO], user, operation_type: OperationType
     ):
         self.repository.fill_transaction_log_by_assets(
             user=user,
@@ -25,7 +25,7 @@ class TransactionService(BaseService):
         )
 
     def get_assets_balance_from_transactions(self) -> list[AssetBalanceDTO]:
-        logs = self.repository.get_log_records_by_user(self.repository.current_user)
+        logs = self.repository.get_transactions_by_user(self.repository.current_user)
 
         records = []
         ticker_to_total_balance = defaultdict(Decimal)

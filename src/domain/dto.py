@@ -6,16 +6,15 @@ from decimal import Decimal
 class BuyAssetDTO:
     ticker: str
     count: Decimal
-    price: Decimal = None
-    id: int = None
+
+    def __hash__(self):
+        return hash(self.ticker)
 
 
 @dataclasses.dataclass
 class SellAssetDTO:
     ticker: str
     count: Decimal
-    price: Decimal = None
-    id: int = None
 
 
 @dataclasses.dataclass
@@ -25,7 +24,7 @@ class AssetBalanceDTO:
 
 
 @dataclasses.dataclass
-class AssetDTO:
+class TransactionAssetDTO:
     ticker: str
     price: Decimal
     count: Decimal
