@@ -6,4 +6,4 @@ from src.domain.use_cases.assets import AssetsUseCases
 @app.output(AssetsSchema)
 def get_assets():
     uc = AssetsUseCases()
-    return {"items": uc.get_assets()}
+    return {"assets": uc.get_assets()}

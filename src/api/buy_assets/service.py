@@ -1,7 +1,6 @@
 import logging
 from decimal import Decimal
 
-from src.api.assets.service import AssetsService
 from src.api.base_service import BaseService
 from src.api.buy_assets.repository import BuyAssetsRepository
 from src.domain.dto import BuyAssetDTO
@@ -13,7 +12,6 @@ class BuyAssetsService(BaseService):
     def __init__(self):
         super().__init__()
         self.repository = BuyAssetsRepository()
-        self.assets_svc = AssetsService()
 
     def calculate_total_buy_sum(self, assets: list[BuyAssetDTO]) -> Decimal:
         buy_sum: Decimal = Decimal(0)

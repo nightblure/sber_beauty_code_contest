@@ -1,3 +1,5 @@
+from typing import Optional
+
 from src.api.base_service import BaseService
 from src.api.assets.repository import AssetRepository
 from src.domain.dto import AssetDTO
@@ -26,3 +28,14 @@ class AssetsService(BaseService):
             assets.append(dto)
 
         return assets
+
+    def is_assets_exists(self, assets) -> tuple[bool, Optional[str]]:
+        tickers = [asset.ticker for asset in assets]
+        db_assets = self.get_assets(tickers)
+        ticker_to_db_asset = {asset.ticker: asset for asset in db_assets}
+
+        for asset in assets:
+            if asset.ticker not in ticker_to_db_asset:
+                return False, asset.ticker
+
+        return True, None

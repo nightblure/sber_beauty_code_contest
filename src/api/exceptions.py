@@ -1,9 +1,11 @@
 from src.core.exceptions import ApplicationError
 
 
-class InsufficientFundsError(ApplicationError):
+class InsufficientFundsToBuyAssetError(ApplicationError):
     status_code = 400
-    message = "Insufficient funds"
+
+    def __init__(self, asset_ticker):
+        self.message = f"Insufficient funds to buy asset '{asset_ticker}'"
 
 
 class AssetNotFoundError(ApplicationError):
@@ -13,11 +15,11 @@ class AssetNotFoundError(ApplicationError):
         self.message = f"Ticker '{asset_ticker}' does not exists"
 
 
-class InsufficientAssetFundsError(ApplicationError):
+class InsufficientAssetFundsToSellError(ApplicationError):
     status_code = 400
 
     def __init__(self, asset_ticker):
-        self.message = f"Insufficient asset funds for '{asset_ticker}'"
+        self.message = f"Insufficient asset funds to sell for '{asset_ticker}'"
 
 
 class AssetNotFoundInPortfolioError(ApplicationError):

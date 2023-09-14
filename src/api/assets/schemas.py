@@ -8,4 +8,4 @@ class AssetSchema(Schema):
 
 
 class AssetsSchema(Schema):
-    items = fields.List(fields.Nested(AssetSchema))
+    assets = fields.List(fields.Nested(AssetSchema))

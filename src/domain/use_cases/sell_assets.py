@@ -3,7 +3,7 @@ import logging
 from src.api.assets.service import AssetsService
 from src.api.balance.service import UserBalanceService
 from src.api.exceptions import (
-    InsufficientAssetFundsError,
+    InsufficientAssetFundsToSellError,
     AssetNotFoundError,
     AssetNotFoundInPortfolioError,
 )
@@ -17,22 +17,21 @@ logger = logging.getLogger(__name__)
 
 class SellAssetsUseCases:
     def __init__(self):
-        self.operations_svc = UserBalanceService()
+        self.balance_svc = UserBalanceService()
         self.assets_svc = AssetsService()
         self.transaction_svc = TransactionService()
         self.sell_assets_svc = SellAssetsService()
 
     def sell_assets(self, sell_assets: list[SellAssetDTO]):
-        user = self.operations_svc.repository.current_user
+        user = self.balance_svc.repository.current_user
 
         # check input assets existing
-        tickers = [asset.ticker for asset in sell_assets]
-        db_assets = self.assets_svc.get_assets(tickers)
-        ticker_to_db_asset = {asset.ticker: asset for asset in db_assets}
+        is_assets_exists, not_found_ticker = self.assets_svc.is_assets_exists(
+            sell_assets
+        )
 
-        for asset in sell_assets:
-            if asset.ticker not in ticker_to_db_asset:
-                raise AssetNotFoundError(asset.ticker)
+        if is_assets_exists is False:
+            raise AssetNotFoundError(not_found_ticker)
 
         # check that user have enough asset balance to sell asset
         db_assets_balance = self.transaction_svc.get_assets_balance_from_transactions()
@@ -48,13 +47,14 @@ class SellAssetsUseCases:
                 raise AssetNotFoundInPortfolioError(sell_asset.ticker)
 
             if db_asset_balance < sell_sum:
-                raise InsufficientAssetFundsError(sell_asset.ticker)
+                raise InsufficientAssetFundsToSellError(sell_asset.ticker)
 
         # fill the transaction log and refill user balance
         self.transaction_svc.fill_transaction_log(
             sell_assets_with_prices, user, OperationType.sell
         )
+
         sell_sum = self.sell_assets_svc.calculate_total_sell_sum(
             sell_assets_with_prices
         )
-        return self.operations_svc.refill_balance(sell_sum)
+        return self.balance_svc.refill_balance(sell_sum)
